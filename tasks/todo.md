@@ -32,3 +32,14 @@ Self-documenting layer added per "display state possibilities and sources": inli
 captions on every driven element + Possible-states/Source columns on /you. Verified in headless
 Chrome against the live Flagsmith environment (project 39600).
 Note: premium_users segment is seeded but bound to no flag.
+
+## Revision (post-review by FE owner)
+Adam reversed the "Both" decision: the storefront must NEVER visually reveal
+flag wiring — it looked like console output bolted onto a retail page. Removed:
+inline .flag-tag captions (all storefront pages + QR cards), FLAG_META /
+flagTagHTML / renderFlagTags in shared.js, .flag-tag CSS, and the /you table's
+Possible-states/Source columns (reverted to Flag|Enabled|Value). README now
+states the flag table is the single wiring source of truth; /you is the live
+state surface. KEPT the two correctness fixes (enabled-state gating;
+[hidden]{display:none!important}) — those make the UI silently obey flag state,
+which is the actual requirement. Re-verified clean storefront in headless Chrome.

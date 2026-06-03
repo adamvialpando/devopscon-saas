@@ -310,27 +310,3 @@ body.has-qr-card { padding-bottom: 260px; }
   text-align: center;
 }
 @media (max-width: 600px) { .qr-card { display: none; } }
-
-/* ---- inline flag captions (.flag-tag-host filled by shared.js) ---- */
-/* Each flag-driven element carries a host that renders the flag's live state,
-   its state possibilities, and its source, so the demo is self-documenting. */
-.flag-tag-host { display: block; margin-top: 6px; }
-.flag-tag {
-  display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px;
-  font: 500 11px/1.45 var(--mono);
-  background: var(--bg-elev); border: 1px solid var(--line);
-  border-radius: 8px; padding: 4px 8px; color: var(--ink-muted);
-  max-width: 100%;
-}
-.flag-tag code { color: var(--ink); font-size: 11px; }
-.flag-tag .ft-state {
-  font: 700 10px/1 var(--mono); padding: 2px 6px; border-radius: 999px;
-  text-transform: uppercase; letter-spacing: 0.04em;
-}
-.flag-tag .ft-state.on  { background: rgba(52, 211, 153, 0.16); color: var(--green); }
-.flag-tag .ft-state.off { background: rgba(100, 116, 139, 0.20); color: var(--grey); }
-.flag-tag .ft-val { color: var(--ink); }
-.flag-tag .ft-states,
-.flag-tag .ft-src { color: var(--ink-muted); }
-.flag-tag .ft-states::before,
-.flag-tag .ft-src::before { content: "·"; margin-right: 4px; opacity: 0.5; }

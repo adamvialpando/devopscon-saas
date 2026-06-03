@@ -65,58 +65,6 @@ const FLAG_DEFAULTS = {
   show_raffle_qr: { enabled: false },
 };
 
-// FLAG_META documents, per flag, the states it can take and where its value is
-// sourced. The client SDK only returns the *resolved* flag, not the reason, so
-// "source" is the configured targeting we maintain here (environment default vs
-// a named segment). Used by the /you flag table and the inline flag captions.
-export const FLAG_META = {
-  dark_mode:            { states: "on → dark theme · off → light",            source: "Environment default" },
-  sale_banner:          { states: "on → banner shown · off → hidden",         source: "Environment default" },
-  sale_banner_text:     { states: "value: banner copy (text)",                source: "Environment default" },
-  featured_product:     { states: "on + product name → highlight · off → none", source: "Environment default" },
-  free_shipping:        { states: "on → FREE (shipping $0) · off → $8",       source: "Environment default" },
-  checkout_v2:          { states: "on → one-click express · off → 3-step",    source: "Environment default" },
-  show_recommendations: { states: "on → rail shown · off → hidden",           source: "Segment: returning_users" },
-  show_reviews:         { states: "on → reviews shown · off → hidden",        source: "Environment default" },
-  early_access_badge:   { states: "on → badge shown · off → hidden",          source: "Segment: beta_testers" },
-  recommended_quantity: { states: "value: default quantity (integer)",        source: "Environment default" },
-  payment_v2:           { states: "on → wallet buttons · off → hidden",       source: "Environment default" },
-  show_qr:              { states: "on → share QR shown · off → hidden",       source: "Environment default" },
-  show_raffle_qr:       { states: "on → raffle QR shown · off → hidden",      source: "Environment default" },
-};
-
-// flagTagHTML renders the live state + state-possibilities + source for one flag
-// as a compact inline caption. Pages place <span class="flag-tag-host"
-// data-flag="key"> (comma-separated for multiple) next to the element a flag
-// drives; renderFlagTags() fills them on every flag change.
-export function flagTagHTML(key) {
-  const meta = FLAG_META[key] || { states: "—", source: "Environment default" };
-  const enabled = flagsmith.hasFeature(key);
-  const raw = flagsmith.getValue(key, { fallback: "" });
-  const hasVal = !(raw === "" || raw === null || raw === undefined);
-  const valHtml = hasVal
-    ? ` <span class="ft-val">${String(raw).replace(/</g, "&lt;")}</span>`
-    : "";
-  return (
-    `<span class="flag-tag">` +
-      `<code>${key}</code>` +
-      `<span class="ft-state ${enabled ? "on" : "off"}">${enabled ? "ON" : "off"}</span>` +
-      valHtml +
-      `<span class="ft-states">${meta.states}</span>` +
-      `<span class="ft-src">src: ${meta.source}</span>` +
-    `</span>`
-  );
-}
-
-function renderFlagTags() {
-  document.querySelectorAll(".flag-tag-host[data-flag]").forEach((host) => {
-    host.innerHTML = host.dataset.flag
-      .split(",")
-      .map((k) => flagTagHTML(k.trim()))
-      .join("");
-  });
-}
-
 export function currentPersona() {
   const key = localStorage.getItem(STORAGE_KEY) || "visitor";
   return PERSONAS[key] ? key : "visitor";
@@ -173,8 +121,7 @@ function ensureShareQrCard() {
   card.innerHTML =
     '<div class="qr-label">Take it with you</div>' +
     '<img class="qr-image" src="./qr.svg" alt="QR code to this demo URL">' +
-    '<div class="qr-url muted">devopscon-saas-ypeb.vercel.app</div>' +
-    '<span class="flag-tag-host" data-flag="show_qr"></span>';
+    '<div class="qr-url muted">devopscon-saas-ypeb.vercel.app</div>';
   document.body.appendChild(card);
 }
 
@@ -189,8 +136,7 @@ function ensureRaffleQrCard() {
   card.innerHTML =
     '<div class="qr-label">Win our raffle</div>' +
     '<img class="qr-image" src="./raffle-qr.svg" alt="QR code to the raffle entry form">' +
-    '<div class="qr-url muted">Enter the giveaway</div>' +
-    '<span class="flag-tag-host" data-flag="show_raffle_qr"></span>';
+    '<div class="qr-url muted">Enter the giveaway</div>';
   document.body.appendChild(card);
 }
 
@@ -226,7 +172,6 @@ export const ready = (async () => {
       applyDarkMode();
       applyQrVisibility();
       renderPersonaChip();
-      renderFlagTags();
       // Each page sets its own onChange via flagsmith.subscribe in its module.
       document.dispatchEvent(new CustomEvent("flags:changed"));
     },
@@ -237,7 +182,6 @@ export const ready = (async () => {
   applyDarkMode();
   applyQrVisibility();
   renderPersonaChip();
-  renderFlagTags();
   flagsmith.startListening(5000);
 })();
 

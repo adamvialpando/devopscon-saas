@@ -120,14 +120,11 @@ Flip them there; the page picks up changes within ~5 s.
 | `show_qr` | `public/shared.js` | every page | reveals a "Take it with you" QR (bottom-right) pointing at the deploy URL |
 | `show_raffle_qr` | `public/shared.js` | every page | reveals the raffle entry QR (bottom-left) pointing at the Google Form |
 
-Every flag drives a UI element and is self-documenting:
+The table above is the single source of truth for the flag→UI wiring. The
+storefront itself never surfaces flag names or state — it just renders as a
+real store would for whatever the flags currently resolve to. Two rules keep
+that faithful:
 
-- **On-page captions.** Each driven element carries a `.flag-tag-host` (see
-  `flagTagHTML` / `FLAG_META` in `public/shared.js`) that renders the flag's
-  live state, its state possibilities, and its source inline next to the element.
-- **`/you` flag table.** Lists every flag the SDK returns with Enabled, Value,
-  **Possible states**, and **Source** columns — enumerated live, so flags added
-  or removed in Flagsmith appear/disappear on the next poll.
 - **Enabled-state gating.** Flagsmith serves a flag's *value* even when the flag
   is **disabled**. Value-driven flags (`featured_product`, `recommended_quantity`)
   therefore check `hasFeature()` first and fall back to the app default when off,
@@ -136,7 +133,10 @@ Every flag drives a UI element and is self-documenting:
   rule in `styles.css` guarantees `el.hidden = true` actually hides an element —
   author `display` rules (e.g. `.qr-card { display:flex }`) would otherwise win.
 
-`premium_users` is seeded for the demo but is not currently bound to any flag.
+The `/you` page is the live introspection surface: it shows each flag's Enabled
+/ Value for the chosen persona, for testing identity- and segment-based
+targeting. `premium_users` is seeded for the demo but is not currently bound to
+any flag.
 
 Segments referenced above are also seeded by `seed.sh`:
 
