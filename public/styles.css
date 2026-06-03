@@ -277,6 +277,12 @@ a { color: inherit; }
   z-index: 10;
 }
 .qr-card.raffle { right: auto; left: 20px; border-color: var(--accent); }
+/* When either QR card is visible (body.has-qr-card set by shared.js), reserve
+   enough bottom padding that long pages don't scroll content behind the
+   fixed-position cards. Mobile hides the cards via the media query below, so
+   the padding also collapses there. */
+body.has-qr-card { padding-bottom: 260px; }
+@media (max-width: 600px) { body.has-qr-card { padding-bottom: 0; } }
 .qr-label {
   font: 600 11px/1.2 var(--font);
   color: var(--ink-muted);

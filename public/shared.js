@@ -140,14 +140,17 @@ function ensureRaffleQrCard() {
   document.body.appendChild(card);
 }
 
-function applyShareQr() {
-  const card = document.getElementById("qr-card");
-  if (card) card.hidden = !flagsmith.hasFeature("show_qr");
-}
-
-function applyRaffleQr() {
-  const card = document.getElementById("raffle-qr-card");
-  if (card) card.hidden = !flagsmith.hasFeature("show_raffle_qr");
+function applyQrVisibility() {
+  // Toggle each QR card and, when either is visible, tag <body> so the page's
+  // bottom padding clears the fixed-position cards (otherwise long pages like
+  // /you scroll their bottom rows behind the cards).
+  const shareOn  = flagsmith.hasFeature("show_qr");
+  const raffleOn = flagsmith.hasFeature("show_raffle_qr");
+  const shareEl  = document.getElementById("qr-card");
+  const raffleEl = document.getElementById("raffle-qr-card");
+  if (shareEl)  shareEl.hidden  = !shareOn;
+  if (raffleEl) raffleEl.hidden = !raffleOn;
+  document.body.classList.toggle("has-qr-card", shareOn || raffleOn);
 }
 
 const ENV_ID = window.__FLAGSMITH_ENV_ID__ || "";
@@ -167,8 +170,7 @@ export const ready = (async () => {
     defaultFlags: FLAG_DEFAULTS,
     onChange: () => {
       applyDarkMode();
-      applyShareQr();
-      applyRaffleQr();
+      applyQrVisibility();
       renderPersonaChip();
       // Each page sets its own onChange via flagsmith.subscribe in its module.
       document.dispatchEvent(new CustomEvent("flags:changed"));
@@ -178,8 +180,7 @@ export const ready = (async () => {
   ensureShareQrCard();
   ensureRaffleQrCard();
   applyDarkMode();
-  applyShareQr();
-  applyRaffleQr();
+  applyQrVisibility();
   renderPersonaChip();
   flagsmith.startListening(5000);
 })();

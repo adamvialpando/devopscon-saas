@@ -1,21 +1,14 @@
 // you.js — identity controls. Persona picker, live flag table, segment match.
+//
+// The flag table is enumerated from the live Flagsmith SDK state on every
+// render (not from a hardcoded array), so any flag created in Flagsmith UI
+// appears here automatically on the next 5 s poll, and any flag removed
+// disappears the same way. No code change required to keep this page honest.
 import { ready, flagsmith, PERSONAS, currentPersona, setPersona } from "./shared.js";
 
-const FLAG_KEYS = [
-  "dark_mode",
-  "sale_banner",
-  "sale_banner_text",
-  "featured_product",
-  "free_shipping",
-  "checkout_v2",
-  "show_recommendations",
-  "show_reviews",
-  "early_access_badge",
-  "recommended_quantity",
-  "payment_v2",
-  "show_qr",
-  "show_raffle_qr",
-];
+function flagKeys() {
+  return Object.keys(flagsmith.getAllFlags() || {}).sort();
+}
 
 const SEGMENT_RULES = [
   { name: "premium_users",   describe: "tier == premium",   match: (t) => t.tier === "premium" },
@@ -60,7 +53,7 @@ function renderFlags() {
   const on  = (k)     => flagsmith.hasFeature(k);
   const val = (k, fb) => flagsmith.getValue(k, { fallback: fb }) ?? fb;
 
-  els.flagRows.innerHTML = FLAG_KEYS.map((k) => {
+  els.flagRows.innerHTML = flagKeys().map((k) => {
     const enabled = on(k);
     const value = val(k, "");
     const displayValue = value === "" || value === null || value === undefined
