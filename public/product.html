@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0F172A">
+  <title>Product · Acme Outfitters</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230F172A'/%3E%3Cpath d='M18 14h28v8H26v8h16v8H26v12h-8z' fill='%23F5C443'/%3E%3C/svg%3E">
+  <script src="./config.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <span class="brand-mark" aria-hidden="true">AO</span>
+    <span class="brand-name">Acme Outfitters</span>
+    <span class="brand-tagline">product detail</span>
+    <span class="spacer"></span>
+    <span class="chip chip-persona" id="persona-chip">Visitor (anonymous)</span>
+    <span class="chip" id="flag-status">loading</span>
+  </header>
+
+  <nav class="nav" data-current="product">
+    <a href="./" data-key="home">Home</a>
+    <a href="./product?id=hoodie" data-key="product">Product detail</a>
+    <a href="./checkout" data-key="checkout">Checkout</a>
+    <a href="./you" data-key="you">Your session</a>
+  </nav>
+
+  <main class="page">
+    <section class="panel store" data-store-theme data-theme="light">
+      <div class="panel-head">
+        <h1 id="product-name">Product</h1>
+        <span class="muted">flag-driven detail page</span>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-hero" id="product-hero" aria-hidden="true">🧥</div>
+        <div>
+          <div id="product-badges"></div>
+          <p class="muted" id="product-tag">Acme Outfitters apparel</p>
+          <div class="price" id="product-price" style="font-size: 22px; font-weight: 700; margin: 8px 0 12px;">—</div>
+
+          <label class="muted small" for="qty">Quantity</label>
+          <div class="qty-picker">
+            <input type="number" id="qty" min="1" max="10" value="1">
+            <span class="muted small" id="qty-source">default</span>
+          </div>
+
+          <a class="cta" href="./checkout">Add to cart and checkout</a>
+        </div>
+      </div>
+
+      <div class="reviews" id="reviews" hidden style="margin-top: 24px;">
+        <div class="panel-head">
+          <h2>Reviews</h2>
+          <span class="muted">controlled by <code>show_reviews</code></span>
+        </div>
+        <div id="reviews-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span id="env-meta" class="muted">Flagsmith env loading...</span>
+    <a class="muted" href="./">← back to catalog</a>
+  </footer>
+
+  <script type="module" src="./product.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0F172A">
+  <title>Checkout · Acme Outfitters</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230F172A'/%3E%3Cpath d='M18 14h28v8H26v8h16v8H26v12h-8z' fill='%23F5C443'/%3E%3C/svg%3E">
+  <script src="./config.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <span class="brand-mark" aria-hidden="true">AO</span>
+    <span class="brand-name">Acme Outfitters</span>
+    <span class="brand-tagline">checkout</span>
+    <span class="spacer"></span>
+    <span class="chip chip-persona" id="persona-chip">Visitor (anonymous)</span>
+    <span class="chip" id="flag-status">loading</span>
+  </header>
+
+  <nav class="nav" data-current="checkout">
+    <a href="./" data-key="home">Home</a>
+    <a href="./product?id=hoodie" data-key="product">Product detail</a>
+    <a href="./checkout" data-key="checkout">Checkout</a>
+    <a href="./you" data-key="you">Your session</a>
+  </nav>
+
+  <main class="page">
+    <section class="panel store" data-store-theme data-theme="light">
+      <div class="panel-head">
+        <h1>Checkout</h1>
+        <span class="muted">flag-driven flow</span>
+      </div>
+
+      <div class="steps" id="steps">
+        <div class="step active">1. Cart</div>
+        <div class="step">2. Shipping</div>
+        <div class="step">3. Payment</div>
+      </div>
+
+      <div class="cart">
+        <h3>Your cart</h3>
+        <ul class="cart-lines" id="cart-lines"></ul>
+        <div class="cart-row"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+        <div class="cart-row"><span>Shipping</span><span id="shipping">$8.00</span></div>
+        <div class="cart-row total"><span>Total</span><span id="total">$0.00</span></div>
+
+        <div id="payments" class="payment-options" hidden>
+          <div class="pay applepay">Pay</div>
+          <div class="pay googlepay">G Pay</div>
+          <div class="pay">Card</div>
+        </div>
+
+        <div id="checkout-v1" class="checkout-block">
+          <button class="cta" type="button">Proceed to checkout</button>
+          <p class="muted small">3-step checkout: cart, shipping, payment.</p>
+        </div>
+        <div id="checkout-v2" class="checkout-block" hidden>
+          <button class="cta express" type="button">⚡ Express checkout</button>
+          <p class="muted small">One-click, saved card, <code>checkout_v2</code>.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span id="env-meta" class="muted">Flagsmith env loading...</span>
+    <a class="muted" href="./">← back to catalog</a>
+  </footer>
+
+  <script type="module" src="./checkout.js"></script>
+</body>
+</html>

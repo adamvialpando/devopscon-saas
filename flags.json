@@ -1,0 +1,42 @@
+{
+  "flags": [
+    { "name": "dark_mode",            "type": "STANDARD", "default_enabled": false, "description": "Storefront theme: light vs dark" },
+    { "name": "sale_banner",          "type": "STANDARD", "default_enabled": false, "description": "Show the gold promo bar at top of catalog" },
+    { "name": "sale_banner_text",     "type": "STANDARD", "default_enabled": true,  "initial_value": "Conference special, 25% off everything", "description": "Promo bar copy" },
+    { "name": "featured_product",     "type": "STANDARD", "default_enabled": true,  "initial_value": "Flagsmith Hoodie", "description": "Product name to highlight on home" },
+    { "name": "free_shipping",        "type": "STANDARD", "default_enabled": false, "description": "Zero out shipping and show FREE badge" },
+    { "name": "checkout_v2",          "type": "STANDARD", "default_enabled": false, "description": "Swap 3-step checkout for one-click express" },
+    { "name": "show_recommendations", "type": "STANDARD", "default_enabled": false, "description": "Show You-might-also-like rail on home (default off; on for returning_users)" },
+    { "name": "show_reviews",         "type": "STANDARD", "default_enabled": true,  "description": "Display reviews block on product detail" },
+    { "name": "early_access_badge",   "type": "STANDARD", "default_enabled": false, "description": "Beta access badge on product detail (target beta_testers segment)" },
+    { "name": "recommended_quantity", "type": "STANDARD", "default_enabled": true,  "initial_value": "1", "description": "Default quantity in product detail picker" },
+    { "name": "payment_v2",           "type": "STANDARD", "default_enabled": false, "description": "Enable Apple Pay / Google Pay buttons in checkout" },
+    { "name": "show_qr",              "type": "STANDARD", "default_enabled": false, "description": "Gate a QR card on the storefront (no UI element yet; mirrors the local demo's flag for parity)" }
+  ],
+  "segments": [
+    {
+      "name": "premium_users",
+      "description": "Identities with tier=premium",
+      "rules": [{
+        "type": "ALL",
+        "conditions": [{ "property": "tier", "operator": "EQUAL", "value": "premium" }]
+      }]
+    },
+    {
+      "name": "beta_testers",
+      "description": "Identities with beta_optin=true",
+      "rules": [{
+        "type": "ALL",
+        "conditions": [{ "property": "beta_optin", "operator": "EQUAL", "value": "true" }]
+      }]
+    },
+    {
+      "name": "returning_users",
+      "description": "Identities with visits > 1",
+      "rules": [{
+        "type": "ALL",
+        "conditions": [{ "property": "visits", "operator": "GREATER_THAN", "value": "1" }]
+      }]
+    }
+  ]
+}
