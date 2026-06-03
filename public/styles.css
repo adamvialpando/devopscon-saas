@@ -262,10 +262,11 @@ a { color: inherit; }
   display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
 }
 
-/* ---- Raffle QR card (injected by shared.js, gated by show_raffle_qr) ---- */
+/* ---- QR cards (injected by shared.js, gated by show_qr / show_raffle_qr) ---- */
+/* Share QR pinned bottom-right; raffle QR pinned bottom-left for symmetry. */
 .qr-card {
   position: fixed;
-  bottom: 20px;
+  right: 20px; bottom: 20px;
   background: var(--bg-card);
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -275,7 +276,7 @@ a { color: inherit; }
   width: 180px;
   z-index: 10;
 }
-.qr-card.raffle { left: 20px; border-color: var(--accent); }
+.qr-card.raffle { right: auto; left: 20px; border-color: var(--accent); }
 .qr-label {
   font: 600 11px/1.2 var(--font);
   color: var(--ink-muted);

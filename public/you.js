@@ -13,6 +13,8 @@ const FLAG_KEYS = [
   "early_access_badge",
   "recommended_quantity",
   "payment_v2",
+  "show_qr",
+  "show_raffle_qr",
 ];
 
 const SEGMENT_RULES = [
@@ -88,7 +90,7 @@ function renderMeta() {
   els.flagStatus.textContent = "live";
   const env = (window.__FLAGSMITH_ENV_ID__ || "").slice(0, 8);
   els.envMeta.textContent = env
-    ? `Flagsmith env ${env}... · flags poll every 15s`
+    ? `Flagsmith env ${env}... · flags poll every 5s`
     : "Flagsmith env not configured (edit public/config.js)";
 }
 

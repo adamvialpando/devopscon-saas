@@ -108,10 +108,25 @@ function applyDarkMode() {
   });
 }
 
+function ensureShareQrCard() {
+  // Inject the share QR (bottom-right) once per page load, hidden by default.
+  // Encodes the Vercel URL so a laptop visitor can scan it onto a phone or
+  // hand the link to someone next to them.
+  if (document.getElementById("qr-card")) return;
+  const card = document.createElement("aside");
+  card.className = "qr-card";
+  card.id = "qr-card";
+  card.setAttribute("aria-label", "Share this demo");
+  card.hidden = true;
+  card.innerHTML =
+    '<div class="qr-label">Take it with you</div>' +
+    '<img class="qr-image" src="./qr.svg" alt="QR code to this demo URL">' +
+    '<div class="qr-url muted">devopscon-saas-ypeb.vercel.app</div>';
+  document.body.appendChild(card);
+}
+
 function ensureRaffleQrCard() {
-  // Inject the raffle QR card once per page load, hidden by default. shared.js
-  // owns this so every page picks it up without each HTML file having to
-  // include the markup.
+  // Inject the raffle QR (bottom-left) once per page load, hidden by default.
   if (document.getElementById("raffle-qr-card")) return;
   const card = document.createElement("aside");
   card.className = "qr-card raffle";
@@ -123,6 +138,11 @@ function ensureRaffleQrCard() {
     '<img class="qr-image" src="./raffle-qr.svg" alt="QR code to the raffle entry form">' +
     '<div class="qr-url muted">Enter the giveaway</div>';
   document.body.appendChild(card);
+}
+
+function applyShareQr() {
+  const card = document.getElementById("qr-card");
+  if (card) card.hidden = !flagsmith.hasFeature("show_qr");
 }
 
 function applyRaffleQr() {
@@ -143,10 +163,11 @@ export const ready = (async () => {
     environmentID: ENV_ID,
     cacheFlags: false,
     enableLogs: false,
-    realtime: false, // SaaS realtime needs Enterprise; poll every 15s instead.
+    realtime: false, // SaaS realtime needs Enterprise; poll every 5s instead.
     defaultFlags: FLAG_DEFAULTS,
     onChange: () => {
       applyDarkMode();
+      applyShareQr();
       applyRaffleQr();
       renderPersonaChip();
       // Each page sets its own onChange via flagsmith.subscribe in its module.
@@ -154,11 +175,13 @@ export const ready = (async () => {
     },
   });
   await applyPersona();
+  ensureShareQrCard();
   ensureRaffleQrCard();
   applyDarkMode();
+  applyShareQr();
   applyRaffleQr();
   renderPersonaChip();
-  flagsmith.startListening(15000);
+  flagsmith.startListening(5000);
 })();
 
 export { flagsmith };

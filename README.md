@@ -52,7 +52,7 @@ bash scripts/seed.sh
 bash scripts/validate.sh
 ```
 
-`seed.sh` creates the 11 flags and 3 segments declared in `flags.json`. It's
+`seed.sh` creates the 13 flags and 3 segments declared in `flags.json`. It's
 idempotent. `validate.sh` confirms they exist.
 
 Then edit `public/config.js` and replace `REPLACE_ME_WITH_YOUR_FLAGSMITH_ENV_ID`
@@ -65,7 +65,7 @@ python3 -m http.server 8080 -d public
 # open http://localhost:8080/
 ```
 
-Toggle flags in the Flagsmith UI; the page picks them up within ~15 s.
+Toggle flags in the Flagsmith UI; the page picks them up within ~5 s.
 
 ## Deploy to Vercel
 
@@ -97,19 +97,36 @@ Toggle flags in the Flagsmith UI; the page picks them up within ~15 s.
 - `public/{index,product,checkout,you}.{html,js}` Per-page markup and behavior.
 - `public/styles.css` Acme Outfitters look and feel.
 
-## What changes when you flip a flag
+## Flags
 
-- `dark_mode`: storefront theme swaps light / dark on every page.
-- `sale_banner` + `sale_banner_text`: gold promo bar on `/`.
-- `featured_product`: highlights a catalog card (match by product name).
-- `show_recommendations`: shows the "You might also like" rail on `/` (set per
-  `returning_users` segment for the demo).
-- `show_reviews`: reviews block on `/product`.
-- `early_access_badge`: beta badge on `/product` (set per `beta_testers`).
-- `recommended_quantity`: default quantity in the qty picker on `/product`.
-- `free_shipping`: zeroes the shipping line, shows FREE badge on `/checkout`.
-- `checkout_v2`: 3-step Proceed-to-checkout flips to one-click Express.
-- `payment_v2`: shows Apple Pay / Google Pay buttons on `/checkout`.
+Every flag below is declared in [`flags.json`](./flags.json) (the source of
+truth for `seed.sh`) and lives in Flagsmith SaaS at
+[project 39600, Development environment](https://app.flagsmith.com/project/39600/environment/VEFcgjUqEBdx64YQt9oHpX/features).
+Flip them there; the page picks up changes within ~5 s.
+
+| Flag | Lives in | Reads on | What it does |
+|---|---|---|---|
+| `dark_mode` | `public/shared.js` | every page | global theme swap, light vs dark |
+| `sale_banner` | `public/home.js` | `/` | shows / hides the gold promo bar |
+| `sale_banner_text` | `public/home.js` | `/` | text content of the promo bar |
+| `featured_product` | `public/home.js` | `/` | highlights the catalog card whose name matches the value |
+| `show_recommendations` | `public/home.js` | `/` | reveals the "You might also like" rail (set per `returning_users` segment) |
+| `show_reviews` | `public/product.js` | `/product` | reviews block on the detail page |
+| `early_access_badge` | `public/product.js` | `/product` | beta badge on the detail page (set per `beta_testers` segment) |
+| `recommended_quantity` | `public/product.js` | `/product` | default value in the quantity picker |
+| `free_shipping` | `public/checkout.js` | `/checkout` | zeroes the shipping line and shows the FREE badge |
+| `checkout_v2` | `public/checkout.js` | `/checkout` | swaps 3-step "Proceed to checkout" for one-click Express |
+| `payment_v2` | `public/checkout.js` | `/checkout` | shows the Apple Pay / Google Pay buttons |
+| `show_qr` | `public/shared.js` | every page | injects a "Take it with you" QR (bottom-right) pointing at the deploy URL |
+| `show_raffle_qr` | `public/shared.js` | every page | injects the raffle entry QR (bottom-left) pointing at the Google Form |
+
+Segments referenced above are also seeded by `seed.sh`:
+
+| Segment | Trait rule | Persona that matches |
+|---|---|---|
+| `premium_users` | `tier == premium` | Premium tier user |
+| `beta_testers` | `beta_optin == true` | Beta tester |
+| `returning_users` | `visits > 1` | Returning user |
 
 ## Out of scope
 
