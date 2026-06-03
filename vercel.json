@@ -1,7 +1,7 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "buildCommand": "bash scripts/validate.sh || bash scripts/seed.sh",
+  "buildCommand": "bash scripts/build.sh",
   "outputDirectory": "public",
   "headers": [{
     "source": "/(.*)",
