@@ -45,12 +45,14 @@
         <div class="cart-row"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
         <div class="cart-row"><span>Shipping</span><span id="shipping">$8.00</span></div>
         <div class="cart-row total"><span>Total</span><span id="total">$0.00</span></div>
+        <span class="flag-tag-host" data-flag="free_shipping"></span>
 
         <div id="payments" class="payment-options" hidden>
           <div class="pay applepay">Pay</div>
           <div class="pay googlepay">G Pay</div>
           <div class="pay">Card</div>
         </div>
+        <span class="flag-tag-host" data-flag="payment_v2"></span>
 
         <div id="checkout-v1" class="checkout-block">
           <button class="cta" type="button">Proceed to checkout</button>
@@ -60,6 +62,7 @@
           <button class="cta express" type="button">⚡ Express checkout</button>
           <p class="muted small">One-click, saved card, <code>checkout_v2</code>.</p>
         </div>
+        <span class="flag-tag-host" data-flag="checkout_v2"></span>
       </div>
     </section>
   </main>

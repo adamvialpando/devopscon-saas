@@ -39,8 +39,13 @@ function render() {
     els.saleBanner.hidden = true;
   }
 
-  // Catalog with featured-product highlight
-  const featured = String(val("featured_product", "")).trim().toLowerCase();
+  // Catalog with featured-product highlight. Gate on the flag being ENABLED,
+  // not just on its value: Flagsmith serves a flag's value even when it is
+  // disabled, so a value-only check would keep highlighting after the flag is
+  // turned off.
+  const featured = on("featured_product")
+    ? String(val("featured_product", "")).trim().toLowerCase()
+    : "";
   els.catalog.innerHTML = "";
   for (const p of PRODUCTS) {
     const card = document.createElement("a");

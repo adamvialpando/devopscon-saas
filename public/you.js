@@ -4,7 +4,7 @@
 // render (not from a hardcoded array), so any flag created in Flagsmith UI
 // appears here automatically on the next 5 s poll, and any flag removed
 // disappears the same way. No code change required to keep this page honest.
-import { ready, flagsmith, PERSONAS, currentPersona, setPersona } from "./shared.js";
+import { ready, flagsmith, PERSONAS, currentPersona, setPersona, FLAG_META } from "./shared.js";
 
 function flagKeys() {
   return Object.keys(flagsmith.getAllFlags() || {}).sort();
@@ -56,6 +56,7 @@ function renderFlags() {
   els.flagRows.innerHTML = flagKeys().map((k) => {
     const enabled = on(k);
     const value = val(k, "");
+    const meta = FLAG_META[k] || { states: "—", source: "Environment default" };
     const displayValue = value === "" || value === null || value === undefined
       ? '<span class="muted">—</span>'
       : `<code>${String(value).replace(/</g, "&lt;")}</code>`;
@@ -63,6 +64,8 @@ function renderFlags() {
       <td><code>${k}</code></td>
       <td><span class="pill ${enabled ? "on" : "off"}">${enabled ? "ON" : "off"}</span></td>
       <td class="val">${displayValue}</td>
+      <td class="muted small">${meta.states.replace(/</g, "&lt;")}</td>
+      <td class="muted small">${meta.source}</td>
     </tr>`;
   }).join("");
 }

@@ -51,12 +51,15 @@ function render() {
     ? '<span class="badge beta">Early access</span>'
     : "";
 
-  // Recommended quantity comes from a flag value; user can override.
-  const qtyVal = parseInt(val("recommended_quantity", "1"), 10) || 1;
+  // Recommended quantity comes from a flag value; user can override. Gate on the
+  // flag being enabled — when off, fall back to 1 rather than serving the stale
+  // flag value (Flagsmith returns the value regardless of enabled state).
+  const qtyOn = on("recommended_quantity");
+  const qtyVal = qtyOn ? (parseInt(val("recommended_quantity", "1"), 10) || 1) : 1;
   if (!els.qty.dataset.touched) {
     els.qty.value = String(qtyVal);
   }
-  els.qtySource.textContent = `(flag default: ${qtyVal})`;
+  els.qtySource.textContent = qtyOn ? `(flag default: ${qtyVal})` : "(flag off → default 1)";
 
   // Reviews block (show_reviews)
   if (on("show_reviews")) {

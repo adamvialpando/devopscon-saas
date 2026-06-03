@@ -11,7 +11,7 @@
     { "name": "early_access_badge",   "type": "STANDARD", "default_enabled": false, "description": "Beta access badge on product detail (target beta_testers segment)" },
     { "name": "recommended_quantity", "type": "STANDARD", "default_enabled": true,  "initial_value": "1", "description": "Default quantity in product detail picker" },
     { "name": "payment_v2",           "type": "STANDARD", "default_enabled": false, "description": "Enable Apple Pay / Google Pay buttons in checkout" },
-    { "name": "show_qr",              "type": "STANDARD", "default_enabled": false, "description": "Gate a QR card on the storefront (no UI element yet; mirrors the local demo's flag for parity)" },
+    { "name": "show_qr",              "type": "STANDARD", "default_enabled": false, "description": "Reveal the share QR card (bottom-right of every page). Encodes the deploy URL so a visitor can scan it onto a phone." },
     { "name": "show_raffle_qr",       "type": "STANDARD", "default_enabled": false, "description": "Reveal the raffle entry QR (bottom-left of every page). Points at the Google Form for the booth giveaway." }
   ],
   "segments": [
