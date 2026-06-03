@@ -61,6 +61,8 @@ const FLAG_DEFAULTS = {
   early_access_badge: { enabled: false },
   recommended_quantity: { enabled: true, value: "1" },
   payment_v2: { enabled: false },
+  show_qr: { enabled: false },
+  show_raffle_qr: { enabled: false },
 };
 
 export function currentPersona() {
@@ -106,6 +108,28 @@ function applyDarkMode() {
   });
 }
 
+function ensureRaffleQrCard() {
+  // Inject the raffle QR card once per page load, hidden by default. shared.js
+  // owns this so every page picks it up without each HTML file having to
+  // include the markup.
+  if (document.getElementById("raffle-qr-card")) return;
+  const card = document.createElement("aside");
+  card.className = "qr-card raffle";
+  card.id = "raffle-qr-card";
+  card.setAttribute("aria-label", "Raffle entry form");
+  card.hidden = true;
+  card.innerHTML =
+    '<div class="qr-label">Win our raffle</div>' +
+    '<img class="qr-image" src="./raffle-qr.svg" alt="QR code to the raffle entry form">' +
+    '<div class="qr-url muted">Enter the giveaway</div>';
+  document.body.appendChild(card);
+}
+
+function applyRaffleQr() {
+  const card = document.getElementById("raffle-qr-card");
+  if (card) card.hidden = !flagsmith.hasFeature("show_raffle_qr");
+}
+
 const ENV_ID = window.__FLAGSMITH_ENV_ID__ || "";
 
 // The ready promise resolves after init + initial identify (if any). Pages
@@ -123,13 +147,16 @@ export const ready = (async () => {
     defaultFlags: FLAG_DEFAULTS,
     onChange: () => {
       applyDarkMode();
+      applyRaffleQr();
       renderPersonaChip();
       // Each page sets its own onChange via flagsmith.subscribe in its module.
       document.dispatchEvent(new CustomEvent("flags:changed"));
     },
   });
   await applyPersona();
+  ensureRaffleQrCard();
   applyDarkMode();
+  applyRaffleQr();
   renderPersonaChip();
   flagsmith.startListening(15000);
 })();
